@@ -1,20 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { SQLiteProvider } from 'expo-sqlite';
+import { initDatabaseSQL } from './database/schema';
+import UserForm from './UserForm';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SQLiteProvider
+      databaseName="userDatabase.db"
+      onInit={async (db) => {
+        await db.execAsync(initDatabaseSQL);
+      }}
+      options={{useNewConnection: false}}
+    >
+      <UserForm/>
+    </SQLiteProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+
