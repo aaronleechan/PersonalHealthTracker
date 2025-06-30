@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
 import { useSQLiteContext } from 'expo-sqlite';
 
-const UserForm = () => {
+const UserForm = ({onStartUp}) => {
   const [form, setForm] = useState({
     name: '',
     age: '',
@@ -23,18 +23,18 @@ const UserForm = () => {
 
   const handleSubmit = async () => {
     try {
-      const { name, age, height, weight, code, createdAt } = form;
+      const { name, age, height, code, createdAt } = form;
 
-      if (!name || !age || !height || !weight || !code) {
+      if (!name || !age || !height || !code) {
         throw new Error('All fields are required');
       }
 
       await db.runAsync(
         `
-        INSERT INTO users (name, age, height, weight, code, createdAt)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO users (name, age, height, code, createdAt)
+        VALUES (?, ?, ?, ?, ?)
         `,
-        [name, age, height, weight, code, createdAt]
+        [name, age, height, code, createdAt]
       );
 
       Alert.alert(`User ${name} has been created successfully!`);
@@ -58,7 +58,15 @@ const UserForm = () => {
       <TextInput style={styles.input} placeholder="Age" value={form.age} onChangeText={(text) => setForm({...form, age: text})} />
       <TextInput style={styles.input} placeholder="Height" value={form.height} onChangeText={(text) => setForm({...form, height: text})} />
       <TextInput style={styles.input} placeholder="Code" value={form.code} onChangeText={(text) => setForm({...form, code: text})} />
-      <Button title="Create User" onPress={handleSubmit} />
+      <View style={styles.buttonGroup}>
+        <View style={styles.createButtonWrapper}>
+          <Button title="Create User" onPress={handleSubmit} color="#2196F3" />
+        </View>
+
+        <View style={styles.mainPageButtonWrapper}>
+          <Button title="Main Page" onPress={onStartUp} color="#4CAF50" />
+        </View>
+      </View>
     </View>
   );
 };
@@ -81,7 +89,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
-  }
+  },
+  buttonGroup: {
+    marginTop: 20,
+  },
+  createButtonWrapper: {
+    marginBottom: 10,
+    borderRadius: 5,
+    overflow: 'hidden',
+  },  
+  mainPageButtonWrapper: {
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
 });
 
 export default UserForm;
