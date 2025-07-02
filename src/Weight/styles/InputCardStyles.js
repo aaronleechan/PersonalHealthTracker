@@ -1,0 +1,86 @@
+// styles/InputCardStyles.js
+import { StyleSheet } from 'react-native';
+
+export const inputCardStyles = StyleSheet.create({
+  inputCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 24,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    alignItems: 'center',
+  },
+  inputLabel: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#2c3e50',
+    marginBottom: 20,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  weightInput: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    borderBottomWidth: 3,
+    borderBottomColor: '#3498db',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    minWidth: 120,
+    textAlign: 'center',
+  },
+  unitLabel: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#7f8c8d',
+    marginLeft: 12,
+  },
+  calculateButton: {
+    backgroundColor: '#3498db',
+    paddingVertical: 18,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    minWidth: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#3498db',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 8,
+    borderWidth: 2,
+    borderColor: '#2980b9',
+    transform: [{ scale: 1 }],
+  },
+  calculateButtonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+  },
+  tapHint: {
+    color: '#ffffff',
+    fontSize: 12,
+    opacity: 0.8,
+    marginTop: 4,
+    fontStyle: 'italic',
+  },
+  buttonDisabled: {
+    backgroundColor: '#bdc3c7',
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+});
