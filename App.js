@@ -25,6 +25,8 @@ const ScreenProvider = ({ children }) => {
   const navigateToHome = () => setScreen('home');
   const navigateToMain = () => setScreen('main');
   const navigateToWeight = () => setScreen('weight');
+  const navigateToBloodPressure = () => setScreen('blood_pressure');
+
 
   const value = {
     screen,
@@ -33,7 +35,8 @@ const ScreenProvider = ({ children }) => {
     navigateToSignUp,
     navigateToHome,
     navigateToMain,
-    navigateToWeight
+    navigateToWeight,
+    navigateToBloodPressure
   };
 
   return (

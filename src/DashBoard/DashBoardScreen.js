@@ -4,6 +4,7 @@ import { SafeAreaView, StatusBar } from 'react-native';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useScreen } from '../../App';
 import WeightScreen from '../Weight/WeightScreen';
+import BloodPressureScreen from '../BloodPressure/BloodPressureScreen';
 
 // Import components
 import DashboardHeader from './components/DashboardHeader';
@@ -23,11 +24,15 @@ const DashBoardScreen = () => {
   const [user, setUser] = useState(null);
   const [currentScreen, setCurrentScreen] = useState('dashboard');
   const [latestWeight, setLatestWeight] = useState(null);
+  const [latestBloodPressure, setLatestBloodPressure] = useState(null);
 
   useEffect(() => {
     loadUserData();
     loadLatestWeight();
+    loadLatestBloodPressure();
   }, []);
+
+  console.log(currentScreen);
 
   const loadUserData = async () => {
     try {
@@ -53,6 +58,84 @@ const DashBoardScreen = () => {
     }
   };
 
+  const loadLatestBloodPressure = async () => {
+    try {
+      const userData = await db.getFirstAsync(`SELECT * FROM users WHERE code = ?`, [userCode]);
+      if (userData) {
+        const bpRecord = await db.getFirstAsync(
+          `SELECT systolic, diastolic, pulse, recordedAt 
+           FROM blood_pressure_records 
+           WHERE userId = ? 
+           ORDER BY recordedAt DESC 
+           LIMIT 1`,
+          [userData.id]
+        );
+        
+        if (bpRecord) {
+          // Calculate BP category
+          const bpCategory = getBPCategory(bpRecord.systolic, bpRecord.diastolic);
+          setLatestBloodPressure({
+            ...bpRecord,
+            category: bpCategory
+          });
+        } else {
+          setLatestBloodPressure(null);
+        }
+      }
+    } catch (error) {
+      console.log('Error loading latest blood pressure:', error);
+    }
+  };
+
+  // AHA Blood Pressure Category Calculator
+  const getBPCategory = (systolic, diastolic) => {
+    if (systolic < 120 && diastolic < 80) {
+      return {
+        stage: 'Normal',
+        color: '#27ae60',
+        shortName: 'Normal'
+      };
+    }
+    
+    if ((systolic >= 120 && systolic <= 129) && diastolic < 80) {
+      return {
+        stage: 'Elevated',
+        color: '#f39c12',
+        shortName: 'Elevated'
+      };
+    }
+    
+    if ((systolic >= 130 && systolic <= 139) || (diastolic >= 80 && diastolic <= 89)) {
+      return {
+        stage: 'High Blood Pressure Stage 1',
+        color: '#e67e22',
+        shortName: 'Stage 1'
+      };
+    }
+    
+    if (systolic >= 140 || diastolic >= 90) {
+      return {
+        stage: 'High Blood Pressure Stage 2',
+        color: '#e74c3c',
+        shortName: 'Stage 2'
+      };
+    }
+    
+    if (systolic > 180 || diastolic > 120) {
+      return {
+        stage: 'Hypertensive Crisis',
+        color: '#8e44ad',
+        shortName: 'Crisis'
+      };
+    }
+
+    return {
+      stage: 'Unknown',
+      color: '#95a5a6',
+      shortName: 'Unknown'
+    };
+  };
+
   const handleCardPress = (item) => {
     switch (item.id) {
       case CARD_TYPES.WEIGHT:
@@ -65,7 +148,7 @@ const DashBoardScreen = () => {
         alert('Calories screen coming soon!');
         break;
       case CARD_TYPES.BLOOD_PRESSURE:
-        alert('Blood Pressure screen coming soon!');
+        setCurrentScreen('bloodpressure');
         break;
       default:
         console.log(`Navigate to ${item.screen}`);
@@ -78,14 +161,15 @@ const DashBoardScreen = () => {
 
   const handleBackToDashboard = () => {
     setCurrentScreen('dashboard');
-    // Reload latest weight when returning from weight screen
+    // Reload latest data when returning from any screen
     loadLatestWeight();
+    loadLatestBloodPressure();
   };
 
-  // Create dynamic dashboard items with latest weight
+  // Create dynamic dashboard items with latest weight and blood pressure
   const dashboardItems = useMemo(() => 
-    createDashboardItems(latestWeight), 
-    [latestWeight]
+    createDashboardItems(latestWeight, latestBloodPressure),
+    [latestWeight, latestBloodPressure]
   );
 
   // Render different screens based on currentScreen state
@@ -93,15 +177,19 @@ const DashBoardScreen = () => {
     return <WeightScreen onBack={handleBackToDashboard} />;
   }
 
+  if(currentScreen === 'bloodpressure'){
+    return <BloodPressureScreen onBack={handleBackToDashboard}/>;
+  }
+
   return (
     <SafeAreaView style={dashboardMainStyles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" translucent={false} />
-      
+             
       {/* Header Component */}
       <DashboardHeader 
-        user={user} 
-        onLogout={handleLogout} 
-      />
+        user={user}
+        onLogout={handleLogout}
+       />
 
       {/* User Info Card Component */}
       <UserInfoCard user={user} />

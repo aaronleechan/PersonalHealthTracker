@@ -1,93 +1,55 @@
-// data/dashboardData.js
-export const dashboardItems = [
-  {
-    id: 'weight',
-    title: 'Weight',
-    icon: '⚖️',
-    color: '#3498db',
-    description: 'Track your weight',
-    screen: 'WeightScreen'
-  },
-  {
-    id: 'activity',
-    title: 'Activity',
-    icon: '🏃‍♂️',
-    color: '#e74c3c',
-    description: 'Log your workouts',
-    screen: 'ActivityScreen'
-  },
-  {
-    id: 'calories',
-    title: 'Calories',
-    icon: '🍎',
-    color: '#f39c12',
-    description: 'Monitor calorie intake',
-    screen: 'CaloriesScreen'
-  },
-  {
-    id: 'bloodpressure',
-    title: 'Blood Pressure',
-    icon: '❤️',
-    color: '#27ae60',
-    description: 'Check blood pressure',
-    screen: 'BloodPressureScreen'
-  }
-];
-
-// Function to create dashboard items with dynamic data
-export const createDashboardItems = (latestWeight = null) => {
-  return [
-    {
-      id: 'weight',
-      title: 'Weight',
-      icon: '⚖️',
-      color: '#3498db',
-      description: latestWeight ? `${latestWeight} lbs` : 'Track your weight',
-      screen: 'WeightScreen',
-      isActive: true
-    },
-    {
-      id: 'activity',
-      title: 'Activity',
-      icon: '🏃‍♂️',
-      color: '#e74c3c',
-      description: 'Log your workouts',
-      screen: 'ActivityScreen',
-      isActive: false // Coming soon
-    },
-    {
-      id: 'calories',
-      title: 'Calories',
-      icon: '🍎',
-      color: '#f39c12',
-      description: 'Monitor calorie intake',
-      screen: 'CaloriesScreen',
-      isActive: false // Coming soon
-    },
-    {
-      id: 'bloodpressure',
-      title: 'Blood Pressure',
-      icon: '❤️',
-      color: '#27ae60',
-      description: 'Check blood pressure',
-      screen: 'BloodPressureScreen',
-      isActive: false // Coming soon
-    }
-  ];
-};
-
-// Card configuration constants
+// dashboardData.js
 export const CARD_TYPES = {
   WEIGHT: 'weight',
-  ACTIVITY: 'activity',
+  ACTIVITY: 'activity', 
   CALORIES: 'calories',
-  BLOOD_PRESSURE: 'bloodpressure'
+  BLOOD_PRESSURE: 'blood_pressure'
 };
 
-// Color constants for consistency
-export const CARD_COLORS = {
-  BLUE: '#3498db',
-  RED: '#e74c3c',
-  ORANGE: '#f39c12',
-  GREEN: '#27ae60'
+export const createDashboardItems = (latestWeight, latestBloodPressure) => {
+  return [
+    {
+      id: CARD_TYPES.WEIGHT,
+      title: 'Weight',
+      icon: '⚖️',
+      value: latestWeight ? `${latestWeight} lbs` : 'No data',
+      subtitle: latestWeight ? 'Latest weight' : 'Track your weight',
+      color: '#3498db',
+      screen: 'weight'
+    },
+    {
+      id: CARD_TYPES.BLOOD_PRESSURE,
+      title: 'Blood Pressure',
+      icon: '🫀',
+      value: latestBloodPressure 
+        ? `${latestBloodPressure.systolic}/${latestBloodPressure.diastolic}`
+        : 'No data',
+      subtitle: latestBloodPressure 
+        ? `${latestBloodPressure.category.shortName} • ${latestBloodPressure.pulse} bpm`
+        : 'Track your BP',
+      color: latestBloodPressure?.category?.color || '#e74c3c',
+      screen: 'bloodpressure',
+      // Additional data for styling
+      category: latestBloodPressure?.category || null,
+      hasData: !!latestBloodPressure
+    },
+    {
+      id: CARD_TYPES.ACTIVITY,
+      title: 'Activity',
+      icon: '🏃‍♂️',
+      value: '0 steps',
+      subtitle: 'Today\'s activity',
+      color: '#f39c12',
+      screen: 'activity'
+    },
+    {
+      id: CARD_TYPES.CALORIES,
+      title: 'Calories',
+      icon: '🔥',
+      value: '0 kcal',
+      subtitle: 'Today\'s intake',
+      color: '#e67e22',
+      screen: 'calories'
+    }
+  ];
 };
