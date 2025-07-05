@@ -135,8 +135,6 @@ const WeightRecordsList = ({ refreshTrigger, onRecordDeleted }) => {
   };
 
   const renderWeightRecord = (item) => {
-    console.log(item);
-    
     const bmiCategory = getBMICategory(item.bmi);
     
     return (

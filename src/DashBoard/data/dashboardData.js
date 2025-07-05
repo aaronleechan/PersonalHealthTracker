@@ -3,7 +3,8 @@ export const CARD_TYPES = {
   WEIGHT: 'weight',
   ACTIVITY: 'activity', 
   CALORIES: 'calories',
-  BLOOD_PRESSURE: 'blood_pressure'
+  BLOOD_PRESSURE: 'blood_pressure',
+  HEALTH_ANALYSIS: 'health_analysis'
 };
 
 export const createDashboardItems = (latestWeight, latestBloodPressure) => {
@@ -34,22 +35,33 @@ export const createDashboardItems = (latestWeight, latestBloodPressure) => {
       hasData: !!latestBloodPressure
     },
     {
-      id: CARD_TYPES.ACTIVITY,
-      title: 'Activity',
-      icon: '🏃‍♂️',
-      value: '0 steps',
-      subtitle: 'Today\'s activity',
-      color: '#f39c12',
-      screen: 'activity'
-    },
-    {
-      id: CARD_TYPES.CALORIES,
-      title: 'Calories',
-      icon: '🔥',
-      value: '0 kcal',
-      subtitle: 'Today\'s intake',
-      color: '#e67e22',
-      screen: 'calories'
+      id: CARD_TYPES.HEALTH_ANALYSIS,
+      title: 'Health Analysis',
+      icon: '🤖',
+      value: (latestWeight && latestBloodPressure) ? 'Ready' : 'Need Data',
+      subtitle: (latestWeight && latestBloodPressure) ? 'Generate insights' : 'Add health data first',
+      color: (latestWeight && latestBloodPressure) ? '#9b59b6' : '#95a5a6',
+      screen: 'health_analysis',
+      hasData: (latestWeight && latestBloodPressure)
     }
+    // ,
+    // {
+    //   id: CARD_TYPES.ACTIVITY,
+    //   title: 'Activity',
+    //   icon: '🏃‍♂️',
+    //   value: '0 steps',
+    //   subtitle: 'Today\'s activity',
+    //   color: '#f39c12',
+    //   screen: 'activity'
+    // },
+    // {
+    //   id: CARD_TYPES.CALORIES,
+    //   title: 'Calories',
+    //   icon: '🔥',
+    //   value: '0 kcal',
+    //   subtitle: 'Today\'s intake',
+    //   color: '#e67e22',
+    //   screen: 'calories'
+    // }
   ];
 };

@@ -5,6 +5,9 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useScreen } from '../../App';
 import WeightScreen from '../Weight/WeightScreen';
 import BloodPressureScreen from '../BloodPressure/BloodPressureScreen';
+import HealthAnalysisScreen from '../HealthAnalysis/HealthAnalysisScreen';
+
+
 
 // Import components
 import DashboardHeader from './components/DashboardHeader';
@@ -31,8 +34,6 @@ const DashBoardScreen = () => {
     loadLatestWeight();
     loadLatestBloodPressure();
   }, []);
-
-  console.log(currentScreen);
 
   const loadUserData = async () => {
     try {
@@ -150,6 +151,9 @@ const DashBoardScreen = () => {
       case CARD_TYPES.BLOOD_PRESSURE:
         setCurrentScreen('bloodpressure');
         break;
+      case CARD_TYPES.HEALTH_ANALYSIS:
+        setCurrentScreen('health_analysis');
+        break;
       default:
         console.log(`Navigate to ${item.screen}`);
     }
@@ -179,6 +183,10 @@ const DashBoardScreen = () => {
 
   if(currentScreen === 'bloodpressure'){
     return <BloodPressureScreen onBack={handleBackToDashboard}/>;
+  }
+
+  if(currentScreen === 'health_analysis'){
+    return <HealthAnalysisScreen onBack={handleBackToDashboard}/>;
   }
 
   return (
