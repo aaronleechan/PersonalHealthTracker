@@ -4,6 +4,7 @@ import { initDatabaseSQL } from './database/schema';
 import UserFormScreen from './src/UserForm/UserFormScreen';
 import HomeScreen from './src/Home/HomeScreen';
 import DashBoardScreen from './src/DashBoard/DashBoardScreen';
+import GroqService from './src/services/GroqService';
 
 // Screen Context
 const ScreenContext = createContext();
@@ -26,6 +27,7 @@ const ScreenProvider = ({ children }) => {
   const navigateToMain = () => setScreen('main');
   const navigateToWeight = () => setScreen('weight');
   const navigateToBloodPressure = () => setScreen('blood_pressure');
+  const navigateToHealthAnalysis = () => setScreen('health_analysis');
 
 
   const value = {
@@ -36,7 +38,8 @@ const ScreenProvider = ({ children }) => {
     navigateToHome,
     navigateToMain,
     navigateToWeight,
-    navigateToBloodPressure
+    navigateToBloodPressure,
+    navigateToHealthAnalysis
   };
 
   return (
@@ -64,6 +67,7 @@ const ScreenRouter = () => {
 
 // Main App Component
 export default function App() {
+  
   return (
     <SQLiteProvider
       databaseName="userDatabase.db"
